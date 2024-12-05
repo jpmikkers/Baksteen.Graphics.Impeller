@@ -103,7 +103,7 @@ public static class ImpellerNative
     /// @return     The display list.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerDisplayListBuilderCreateDisplayListNew(IntPtr builder);
+    public static extern ImpellerDisplayListSafeHandle ImpellerDisplayListBuilderCreateDisplayListNew(IntPtr builder);
 
     //------------------------------------------------------------------------------
     /// @brief      Retain a strong reference to the object. The object can be NULL
@@ -138,7 +138,7 @@ public static class ImpellerNative
     ///
     /// @return     If the display list could be drawn onto the surface.
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool ImpellerSurfaceDrawDisplayList(ImpellerSurfaceSafeHandle surface, IntPtr displayList);
+    public static extern bool ImpellerSurfaceDrawDisplayList(ImpellerSurfaceSafeHandle surface, ImpellerDisplayListSafeHandle displayList);
 
     /// @brief      Create a new paint with default values.
     ///

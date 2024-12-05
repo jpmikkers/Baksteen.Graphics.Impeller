@@ -154,7 +154,7 @@ internal class Program
           new ImpellerNative.ImpellerRect { x = 290, y = 10, width = 100, height = 100 },
           paint);
 
-        IntPtr displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder);
+        using var displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder);
 
         if (builder == IntPtr.Zero)
         {
@@ -179,7 +179,7 @@ internal class Program
             //glClear(GL_COLOR_BUFFER_BIT);
         }
 
-        ImpellerNative.ImpellerDisplayListRelease(displayList);
+        //ImpellerNative.ImpellerDisplayListRelease(displayList);
         //ImpellerNative.ImpellerSurfaceRelease(surface);
         //ImpellerNative.ImpellerContextRelease(context);
     }
