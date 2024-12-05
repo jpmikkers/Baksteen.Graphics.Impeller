@@ -45,7 +45,7 @@ public static class ImpellerNative
     ///
     /// @return     The surface if once can be created, NULL otherwise.
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerSurfaceCreateWrappedFBONew(ImpellerContextSafeHandle context,
+    public static extern ImpellerSurfaceSafeHandle ImpellerSurfaceCreateWrappedFBONew(ImpellerContextSafeHandle context,
                                      UInt64 fbo,
                                      ImpellerPixelFormat format,
                                      [In] ref ImpellerISize size);
@@ -138,7 +138,7 @@ public static class ImpellerNative
     ///
     /// @return     If the display list could be drawn onto the surface.
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool ImpellerSurfaceDrawDisplayList(IntPtr surface, IntPtr displayList);
+    public static extern bool ImpellerSurfaceDrawDisplayList(ImpellerSurfaceSafeHandle surface, IntPtr displayList);
 
     /// @brief      Create a new paint with default values.
     ///

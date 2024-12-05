@@ -93,9 +93,9 @@ internal class Program
             Height = fbHeight
         };
 
-        IntPtr surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(context, 0, ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888, ref iSize);
+        using var surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(context, 0, ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888, ref iSize);
 
-        if (surface == IntPtr.Zero)
+        if (surface.IsInvalid)
         {
             throw new Exception("Failed to create Impeller surface.");
         }
@@ -180,7 +180,7 @@ internal class Program
         }
 
         ImpellerNative.ImpellerDisplayListRelease(displayList);
-        ImpellerNative.ImpellerSurfaceRelease(surface);
+        //ImpellerNative.ImpellerSurfaceRelease(surface);
         //ImpellerNative.ImpellerContextRelease(context);
     }
 
