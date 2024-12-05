@@ -80,9 +80,9 @@ internal class Program
         ImpellerNative.ImpellerProcAddressCallback procAddressCallback = MyProcAddressCallback;
         IntPtr userData = IntPtr.Zero;
 
-        IntPtr context = ImpellerNative.ImpellerContextCreateOpenGLESNew(ImpellerNative.ImpellerGetVersion(), procAddressCallback, userData);
+        using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(ImpellerNative.ImpellerGetVersion(), procAddressCallback, userData);
 
-        if (context == IntPtr.Zero)
+        if (context.IsInvalid)
         {
             throw new Exception("Failed to create Impeller context.");
         }
@@ -181,7 +181,7 @@ internal class Program
 
         ImpellerNative.ImpellerDisplayListRelease(displayList);
         ImpellerNative.ImpellerSurfaceRelease(surface);
-        ImpellerNative.ImpellerContextRelease(context);
+        //ImpellerNative.ImpellerContextRelease(context);
     }
 
     private static void SetHueShiftedColor(double time)

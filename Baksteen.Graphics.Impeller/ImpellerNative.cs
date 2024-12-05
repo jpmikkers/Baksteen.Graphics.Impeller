@@ -15,7 +15,7 @@ public static class ImpellerNative
     public delegate IntPtr ImpellerProcAddressCallback(string procName, IntPtr userData);
 
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerContextCreateOpenGLESNew(
+    public static extern ImpellerContextSafeHandle ImpellerContextCreateOpenGLESNew(
         uint version,
         ImpellerProcAddressCallback glProcAddressCallback,
         IntPtr glProcAddressCallbackUserData);
@@ -45,7 +45,7 @@ public static class ImpellerNative
     ///
     /// @return     The surface if once can be created, NULL otherwise.
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerSurfaceCreateWrappedFBONew(IntPtr context,
+    public static extern IntPtr ImpellerSurfaceCreateWrappedFBONew(ImpellerContextSafeHandle context,
                                      UInt64 fbo,
                                      ImpellerPixelFormat format,
                                      [In] ref ImpellerISize size);
