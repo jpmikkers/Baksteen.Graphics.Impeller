@@ -48,7 +48,7 @@ public static class ImpellerNative
     public static extern ImpellerSurfaceSafeHandle ImpellerSurfaceCreateWrappedFBONew(ImpellerContextSafeHandle context,
                                      UInt64 fbo,
                                      ImpellerPixelFormat format,
-                                     [In] ref ImpellerISize size);
+                                     in ImpellerISize size);
 
     /// Retain a strong reference to the object. The object can be NULL
     /// in which case this method is a no-op.
@@ -75,7 +75,7 @@ public static class ImpellerNative
     /// @return     The display list builder.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerDisplayListBuilderNew(IntPtr cullRect);  // should be [In] ref const ImpellerRect* IMPELLER_NULLABLE cull_rect);
+    public static extern ImpellerDisplayListBuilderSafeHandle ImpellerDisplayListBuilderNew(IntPtr cullRect);  // should be [In] ref const ImpellerRect* IMPELLER_NULLABLE cull_rect);
 
     //------------------------------------------------------------------------------
     /// @brief      Retain a strong reference to the object. The object can be NULL
@@ -103,7 +103,7 @@ public static class ImpellerNative
     /// @return     The display list.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ImpellerDisplayListSafeHandle ImpellerDisplayListBuilderCreateDisplayListNew(IntPtr builder);
+    public static extern ImpellerDisplayListSafeHandle ImpellerDisplayListBuilderCreateDisplayListNew(ImpellerDisplayListBuilderSafeHandle builder);
 
     //------------------------------------------------------------------------------
     /// @brief      Retain a strong reference to the object. The object can be NULL
@@ -145,7 +145,7 @@ public static class ImpellerNative
     /// @return     The impeller paint.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr ImpellerPaintNew();
+    public static extern ImpellerPaintSafeHandle ImpellerPaintNew();
 
     /// @brief      Retain a strong reference to the object. The object can be NULL
     ///             in which case this method is a no-op.
@@ -169,7 +169,9 @@ public static class ImpellerNative
     /// @param[in]  color  The color.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ImpellerPaintSetColor(IntPtr paint, in ImpellerColor color);
+    public static extern void ImpellerPaintSetColor(
+        ImpellerPaintSafeHandle paint, 
+        in ImpellerColor color);
 
     /// @brief      Fills the current clip with the specified paint.
     ///
@@ -177,7 +179,9 @@ public static class ImpellerNative
     /// @param[in]  paint    The paint.
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ImpellerDisplayListBuilderDrawPaint(IntPtr builder, IntPtr paint);
+    public static extern void ImpellerDisplayListBuilderDrawPaint(
+        ImpellerDisplayListBuilderSafeHandle builder, 
+        ImpellerPaintSafeHandle paint);
 
     /// @brief      Draws a rectangle.
     ///
@@ -187,9 +191,9 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerDisplayListBuilderDrawRect(
-      IntPtr builder,
+      ImpellerDisplayListBuilderSafeHandle builder,
       in ImpellerRect rect,
-      IntPtr paint);
+      ImpellerPaintSafeHandle paint);
 
     /// @brief      Draws an oval.
     ///
@@ -199,9 +203,9 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerDisplayListBuilderDrawOval(
-      IntPtr builder,
+      ImpellerDisplayListBuilderSafeHandle builder,
       in ImpellerRect rect,
-      IntPtr paint);
+      ImpellerPaintSafeHandle paint);
 
     /// @brief      Draws a rounded rect.
     ///
@@ -212,10 +216,10 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerDisplayListBuilderDrawRoundedRect(
-      IntPtr builder,
+      ImpellerDisplayListBuilderSafeHandle builder,
       in ImpellerRect rect,
       in ImpellerRoundingRadii radii,
-      IntPtr paint);
+      ImpellerPaintSafeHandle paint);
 
     //------------------------------------------------------------------------------
     // Enumerations

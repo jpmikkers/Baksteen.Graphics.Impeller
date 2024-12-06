@@ -6,18 +6,27 @@ using System.Runtime.InteropServices;
 
 internal class Program
 {
+    private static Image CreateIcon()
+    {
+        return new Image
+        {
+            Width = 2,
+            Height = 2,
+            Pixels = [
+                0, 0, 0, 255,
+                255, 0, 0, 255,
+                0, 255, 0, 255,
+                0, 0, 255, 255
+            ]
+        };
+    }
+
     public static IntPtr MyProcAddressCallback(string procName, IntPtr userData)
     {
         //Console.WriteLine($"GetProcAddress for {procName}");
         return Glfw.GetProcAddress(procName);
     }
 
-    private const int GL_COLOR_BUFFER_BIT = 0x00004000;
-
-    private delegate void glClearColorHandler(float r, float g, float b, float a);
-    private delegate void glClearHandler(int mask);
-    private static glClearColorHandler glClearColor;
-    private static glClearHandler glClear;
 
     static void Main(string[] args)
     {
@@ -60,11 +69,6 @@ internal class Program
         int refreshRate = videoMode.RefreshRate;
         double delta = 1.0 / refreshRate;
 
-        glClearColor = Marshal.GetDelegateForFunctionPointer<glClearColorHandler>(
-          Glfw.GetProcAddress("glClearColor"));
-        glClear = Marshal.GetDelegateForFunctionPointer<glClearHandler>(
-          Glfw.GetProcAddress("glClear"));
-
         Glfw.SetWindowIcon(window, [CreateIcon()]);
 
         Glfw.SetKeyCallback(window, (window, key, scancode, action, mods) =>
@@ -74,139 +78,141 @@ internal class Program
 
         GC.Collect();
 
-
         Console.WriteLine($"Running impeller version : {ImpellerCooked.GetVersion()}");
 
         ImpellerNative.ImpellerProcAddressCallback procAddressCallback = MyProcAddressCallback;
-        IntPtr userData = IntPtr.Zero;
+        var userData = IntPtr.Zero;
 
-        using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(ImpellerNative.ImpellerGetVersion(), procAddressCallback, userData);
+        using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(
+            ImpellerNative.ImpellerGetVersion(),
+            procAddressCallback,
+            userData
+        ).AssertValid();
 
-        if (context.IsInvalid)
+        using var surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(
+            context,
+            0,
+            ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
+            new ImpellerNative.ImpellerISize
+            {
+                Width = fbWidth,
+                Height = fbHeight
+            }
+        ).AssertValid();
+
+        ImpellerDisplayListSafeHandle displayList;
+
+        using (var builder = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero).AssertValid())
+        using (var paint = ImpellerNative.ImpellerPaintNew().AssertValid())
         {
-            throw new Exception("Failed to create Impeller context.");
+            // clear screen
+            ImpellerNative.ImpellerPaintSetColor(
+                paint,
+                color: new ImpellerNative.ImpellerColor
+                {
+                    alpha = 1.0f,
+                    blue = 0.0f,
+                    green = 1.0f,
+                    red = 1.0f
+                }
+            );
+
+            ImpellerNative.ImpellerDisplayListBuilderDrawPaint(
+              builder,
+              paint);
+
+            // draw rectangle
+            ImpellerNative.ImpellerPaintSetColor(
+                paint,
+                color: new ImpellerNative.ImpellerColor
+                {
+                    alpha = 1.0f,
+                    blue = 0.0f,
+                    green = 0.0f,
+                    red = 1.0f
+                }
+            );
+
+            ImpellerNative.ImpellerDisplayListBuilderDrawRect(
+              builder,
+              new ImpellerNative.ImpellerRect
+              {
+                  x = 10,
+                  y = 10,
+                  width = 100,
+                  height = 100
+              },
+              paint);
+
+            // draw rounded rectangle
+            ImpellerNative.ImpellerPaintSetColor(
+                paint,
+                color: new ImpellerNative.ImpellerColor
+                {
+                    alpha = 1.0f,
+                    blue = 1.0f,
+                    green = 0.0f,
+                    red = 0.0f
+                }
+            );
+
+            ImpellerNative.ImpellerDisplayListBuilderDrawRoundedRect(
+                builder,
+                new ImpellerNative.ImpellerRect
+                {
+                    x = 150,
+                    y = 10,
+                    width = 100,
+                    height = 100
+                },
+                new ImpellerNative.ImpellerRoundingRadii
+                {
+                    top_left = new() { x = 20, y = 20 },
+                    bottom_left = new() { x = 20, y = 20 },
+                    top_right = new() { x = 20, y = 20 },
+                    bottom_right = new() { x = 20, y = 20 },
+                },
+                paint
+            );
+
+            // draw oval
+            ImpellerNative.ImpellerPaintSetColor(
+                paint,
+                color: new ImpellerNative.ImpellerColor
+                {
+                    alpha = 1.0f,
+                    blue = 0.0f,
+                    green = 1.0f,
+                    red = 0.0f
+                }
+            );
+
+            ImpellerNative.ImpellerDisplayListBuilderDrawOval(
+                builder,
+                new ImpellerNative.ImpellerRect
+                {
+                    x = 290,
+                    y = 10,
+                    width = 100,
+                    height = 100
+                },
+                paint);
+
+            displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder).AssertValid();
         }
 
-        ImpellerNative.ImpellerISize iSize = new()
+        using (displayList)
         {
-            Width = fbWidth,
-            Height = fbHeight
-        };
+            while (!Glfw.WindowShouldClose(window))
+            {
+                Glfw.PollEvents();
 
-        using var surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(context, 0, ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888, ref iSize);
+                ImpellerNative.ImpellerSurfaceDrawDisplayList(surface, displayList);
 
-        if (surface.IsInvalid)
-        {
-            throw new Exception("Failed to create Impeller surface.");
+                Glfw.SwapBuffers(window);
+
+                //double currentTime = Glfw.GetTime();
+            }
         }
-
-        IntPtr builder = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero);
-
-        if (builder == IntPtr.Zero)
-        {
-            throw new Exception("Failed to create display list builder.");
-        }
-
-        IntPtr paint = ImpellerNative.ImpellerPaintNew();
-
-        if (paint == IntPtr.Zero)
-        {
-            throw new Exception("Failed to create paint object.");
-        }
-
-        // clear screen
-        ImpellerNative.ImpellerPaintSetColor(paint, color: new ImpellerNative.ImpellerColor { alpha = 1.0f, blue = 0.0f, green = 1.0f, red = 1.0f });
-        ImpellerNative.ImpellerDisplayListBuilderDrawPaint(
-          builder,
-          paint);
-
-        // draw rectangle
-        ImpellerNative.ImpellerPaintSetColor(paint, color: new ImpellerNative.ImpellerColor { alpha = 1.0f, blue = 0.0f, green = 0.0f, red = 1.0f });
-        ImpellerNative.ImpellerDisplayListBuilderDrawRect(
-          builder,
-          new ImpellerNative.ImpellerRect { x = 10, y = 10, width = 100, height = 100 },
-          paint);
-
-        // draw rounded rectangle
-        ImpellerNative.ImpellerPaintSetColor(paint, color: new ImpellerNative.ImpellerColor { alpha = 1.0f, blue = 1.0f, green = 0.0f, red = 0.0f });
-        ImpellerNative.ImpellerDisplayListBuilderDrawRoundedRect(
-          builder,
-          new ImpellerNative.ImpellerRect
-          {
-              x = 150,
-              y = 10,
-              width = 100,
-              height = 100
-          },
-          new ImpellerNative.ImpellerRoundingRadii
-          {
-              top_left = new() { x = 20, y = 10 },
-              bottom_left = new() { x = 20, y = 10 },
-              top_right = new() { x = 20, y = 10 },
-              bottom_right = new() { x = 20, y = 10 },
-          },
-          paint);
-
-        // draw oval
-        ImpellerNative.ImpellerPaintSetColor(paint, color: new ImpellerNative.ImpellerColor { alpha = 1.0f, blue = 0.0f, green = 1.0f, red = 0.0f });
-        ImpellerNative.ImpellerDisplayListBuilderDrawOval(
-          builder,
-          new ImpellerNative.ImpellerRect { x = 290, y = 10, width = 100, height = 100 },
-          paint);
-
-        using var displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder);
-
-        if (builder == IntPtr.Zero)
-        {
-            throw new Exception("Failed to create display list.");
-        }
-
-        ImpellerNative.ImpellerPaintRelease(paint);
-        ImpellerNative.ImpellerDisplayListBuilderRelease(builder);
-
-        while (!Glfw.WindowShouldClose(window))
-        {
-            Glfw.PollEvents();
-
-            ImpellerNative.ImpellerSurfaceDrawDisplayList(surface, displayList);
-
-            Glfw.SwapBuffers(window);
-
-            //double currentTime = Glfw.GetTime();
-            //SetHueShiftedColor(currentTime * delta * 200);
-
-            // Clear the buffer to the set color
-            //glClear(GL_COLOR_BUFFER_BIT);
-        }
-
-        //ImpellerNative.ImpellerDisplayListRelease(displayList);
-        //ImpellerNative.ImpellerSurfaceRelease(surface);
-        //ImpellerNative.ImpellerContextRelease(context);
-    }
-
-    private static void SetHueShiftedColor(double time)
-    {
-        // Set the clear color to a shifted hue
-        float r = (float)(Math.Sin(time) / 2 + 0.5);
-        float g = (float)(Math.Sin(time + 2) / 2 + 0.5);
-        float b = (float)(Math.Sin(time + 4) / 2 + 0.5);
-        float a = 1.0f;
-        glClearColor(r, g, b, a);
-    }
-
-    private static Image CreateIcon()
-    {
-        var image = new Image
-        {
-            Width = 2,
-            Height = 2,
-            Pixels = [
-            0, 0, 0, 255,
-        255, 0, 0, 255,
-        0, 255, 0, 255,
-        0, 0, 255, 255
-          ]
-        };
-        return image;
     }
 }
