@@ -80,17 +80,19 @@ internal class Program
 
         Console.WriteLine($"Running impeller version : {ImpellerCooked.GetVersion()}");
 
-        ImpellerNative.ImpellerProcAddressCallback procAddressCallback = MyProcAddressCallback;
-        var userData = IntPtr.Zero;
+        //ImpellerNative.ImpellerProcAddressCallback procAddressCallback = MyProcAddressCallback;
+        //var userData = IntPtr.Zero;
 
-        using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(
-            ImpellerNative.ImpellerGetVersion(),
-            procAddressCallback,
-            userData
-        ).AssertValid();
+        //using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(
+        //    ImpellerNative.ImpellerGetVersion(),
+        //    procAddressCallback,
+        //    userData
+        //).AssertValid();
+
+        using var context = new ImpellerContext(procName => Glfw.GetProcAddress(procName));
 
         using var surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(
-            context,
+            context.Handle,
             0,
             ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
             new ImpellerNative.ImpellerISize

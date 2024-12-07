@@ -1,6 +1,7 @@
 ﻿namespace Baksteen.Graphics.Impeller;
 
 using System;
+using DotGLFW;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
 
 public class ImpellerPaint : IDisposable
