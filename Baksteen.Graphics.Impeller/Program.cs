@@ -103,35 +103,32 @@ internal class Program
         ImpellerDisplayListSafeHandle displayList;
 
         using (var builder = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero).AssertValid())
-        using (var paint = ImpellerNative.ImpellerPaintNew().AssertValid())
+        using (var paint = new ImpellerPaint())
         {
-            // clear screen
-            ImpellerNative.ImpellerPaintSetColor(
-                paint,
-                color: new ImpellerNative.ImpellerColor
-                {
-                    alpha = 1.0f,
-                    blue = 0.0f,
-                    green = 1.0f,
-                    red = 1.0f
-                }
-            );
+            paint.Color = new()
+            {
+                alpha = 1.0f,
+                blue = 0.0f,
+                green = 1.0f,
+                red = 1.0f
+            };
 
             ImpellerNative.ImpellerDisplayListBuilderDrawPaint(
               builder,
-              paint);
+              paint.Handle);
 
-            // draw rectangle
-            ImpellerNative.ImpellerPaintSetColor(
-                paint,
-                color: new ImpellerNative.ImpellerColor
-                {
-                    alpha = 1.0f,
-                    blue = 0.0f,
-                    green = 0.0f,
-                    red = 1.0f
-                }
-            );
+            paint.Color = new()
+            {
+                alpha = 1.0f,
+                blue = 0.0f,
+                green = 0.0f,
+                red = 1.0f
+            };
+
+            paint.DrawStyle = ImpellerNative.ImpellerDrawStyle.kImpellerDrawStyleStroke;
+            //paint.StrokeCap = ImpellerNative.ImpellerStrokeCap.kImpellerStrokeCapButt;
+            paint.StrokeWidth = 2.0f;
+            //paint.StrokeMiter = 10.0f;
 
             ImpellerNative.ImpellerDisplayListBuilderDrawRect(
               builder,
@@ -142,19 +139,15 @@ internal class Program
                   width = 100,
                   height = 100
               },
-              paint);
+              paint.Handle);
 
             // draw rounded rectangle
-            ImpellerNative.ImpellerPaintSetColor(
-                paint,
-                color: new ImpellerNative.ImpellerColor
-                {
-                    alpha = 1.0f,
-                    blue = 1.0f,
-                    green = 0.0f,
-                    red = 0.0f
-                }
-            );
+            paint.Color = new() {
+                alpha = 1.0f,
+                blue = 1.0f,
+                green = 0.0f,
+                red = 0.0f
+            };
 
             ImpellerNative.ImpellerDisplayListBuilderDrawRoundedRect(
                 builder,
@@ -172,20 +165,17 @@ internal class Program
                     top_right = new() { x = 20, y = 20 },
                     bottom_right = new() { x = 20, y = 20 },
                 },
-                paint
+                paint.Handle
             );
 
             // draw oval
-            ImpellerNative.ImpellerPaintSetColor(
-                paint,
-                color: new ImpellerNative.ImpellerColor
-                {
-                    alpha = 1.0f,
-                    blue = 0.0f,
-                    green = 1.0f,
-                    red = 0.0f
-                }
-            );
+            paint.Color = new()
+            {
+                alpha = 1.0f,
+                blue = 0.0f,
+                green = 1.0f,
+                red = 0.0f
+            };
 
             ImpellerNative.ImpellerDisplayListBuilderDrawOval(
                 builder,
@@ -196,7 +186,7 @@ internal class Program
                     width = 100,
                     height = 100
                 },
-                paint);
+                paint.Handle);
 
             displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder).AssertValid();
         }

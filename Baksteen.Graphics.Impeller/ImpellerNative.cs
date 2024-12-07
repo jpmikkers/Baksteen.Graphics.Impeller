@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static Baksteen.Graphics.Impeller.ImpellerNative;
 
 public static class ImpellerNative
 {
@@ -172,6 +173,52 @@ public static class ImpellerNative
     public static extern void ImpellerPaintSetColor(
         ImpellerPaintSafeHandle paint, 
         in ImpellerColor color);
+
+    /// @brief      Set the paint draw style. The style controls if the closed
+    ///             shapes are filled and/or stroked.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  style  The style.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetDrawStyle(ImpellerPaintSafeHandle paint,
+                               ImpellerDrawStyle style);
+
+    /// @brief      Sets how strokes rendered using this paint are capped.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  cap    The stroke cap style.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetStrokeCap(ImpellerPaintSafeHandle paint,
+                               ImpellerStrokeCap cap);
+
+    /// @brief      Sets how strokes rendered using this paint are joined.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  join   The join.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetStrokeJoin(ImpellerPaintSafeHandle paint,
+                                ImpellerStrokeJoin join);
+
+    /// @brief      Set the width of the strokes rendered using this paint.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  width  The width.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetStrokeWidth(ImpellerPaintSafeHandle paint,
+                                 float width);
+
+    /// @brief      Set the miter limit of the strokes rendered using this paint.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  miter  The miter limit.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetStrokeMiter(ImpellerPaintSafeHandle paint,
+                                 float miter);
 
     /// @brief      Fills the current clip with the specified paint.
     ///

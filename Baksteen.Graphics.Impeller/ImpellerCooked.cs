@@ -1,6 +1,9 @@
 ﻿namespace Baksteen.Graphics.Impeller;
 
 using System;
+using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Net.NetworkInformation;
 
 public static class ImpellerCooked
 {
