@@ -21,13 +21,6 @@ internal class Program
         };
     }
 
-    public static IntPtr MyProcAddressCallback(string procName, IntPtr userData)
-    {
-        //Console.WriteLine($"GetProcAddress for {procName}");
-        return Glfw.GetProcAddress(procName);
-    }
-
-
     static void Main(string[] args)
     {
         Glfw.Init();
@@ -95,7 +88,7 @@ internal class Program
 
         ImpellerDisplayListSafeHandle displayList;
 
-        using (var builder = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero).AssertValid())
+        using (var builder = new ImpellerDisplayListBuilder())
         using (var paint = new ImpellerPaint())
         {
             paint.Color = new()
@@ -106,9 +99,7 @@ internal class Program
                 red = 1.0f
             };
 
-            ImpellerNative.ImpellerDisplayListBuilderDrawPaint(
-              builder,
-              paint.Handle);
+            builder.DrawPaint( paint );
 
             paint.Color = new()
             {
@@ -123,8 +114,7 @@ internal class Program
             paint.StrokeWidth = 2.0f;
             //paint.StrokeMiter = 10.0f;
 
-            ImpellerNative.ImpellerDisplayListBuilderDrawRect(
-              builder,
+            builder.DrawRect(
               new ImpellerNative.ImpellerRect
               {
                   x = 10,
@@ -132,7 +122,7 @@ internal class Program
                   width = 100,
                   height = 100
               },
-              paint.Handle);
+              paint);
 
             // draw rounded rectangle
             paint.Color = new() {
@@ -142,8 +132,7 @@ internal class Program
                 red = 0.0f
             };
 
-            ImpellerNative.ImpellerDisplayListBuilderDrawRoundedRect(
-                builder,
+            builder.DrawRoundedRect(
                 new ImpellerNative.ImpellerRect
                 {
                     x = 150,
@@ -158,7 +147,7 @@ internal class Program
                     top_right = new() { x = 20, y = 20 },
                     bottom_right = new() { x = 20, y = 20 },
                 },
-                paint.Handle
+                paint
             );
 
             // draw oval
@@ -170,8 +159,7 @@ internal class Program
                 red = 0.0f
             };
 
-            ImpellerNative.ImpellerDisplayListBuilderDrawOval(
-                builder,
+            builder.DrawOval(
                 new ImpellerNative.ImpellerRect
                 {
                     x = 290,
@@ -179,9 +167,34 @@ internal class Program
                     width = 100,
                     height = 100
                 },
-                paint.Handle);
+                paint);
 
-            displayList = ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(builder).AssertValid();
+            // draw line
+            paint.Color = new()
+            {
+                alpha = 1.0f,
+                blue = 1.0f,
+                green = 1.0f,
+                red = 0.0f
+            };
+
+            paint.StrokeWidth = 20;
+            paint.StrokeCap = ImpellerNative.ImpellerStrokeCap.kImpellerStrokeCapButt;
+
+            builder.DrawLine(
+                new ImpellerNative.ImpellerPoint
+                {
+                    x=10,
+                    y=200
+                },
+                new ImpellerNative.ImpellerPoint
+                {
+                    x=200,
+                    y=300
+                },
+                paint);
+
+            displayList = builder.CreateDisplayListNew();
         }
 
         using (displayList)

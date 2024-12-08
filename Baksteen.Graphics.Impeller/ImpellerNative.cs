@@ -268,6 +268,20 @@ public static class ImpellerNative
       in ImpellerRoundingRadii radii,
       ImpellerPaintSafeHandle paint);
 
+    /// @brief      Draws a line segment.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  from     The starting point of the line.
+    /// @param[in]  to       The end point of the line.
+    /// @param[in]  paint    The paint.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderDrawLine(
+    ImpellerDisplayListBuilderSafeHandle builder,
+    in ImpellerPoint from,
+    in ImpellerPoint to,
+    ImpellerPaintSafeHandle paint);
+
     //------------------------------------------------------------------------------
     // Enumerations
     // -----------------------------------------------------------------------------
