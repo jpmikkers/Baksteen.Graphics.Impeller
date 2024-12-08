@@ -86,7 +86,7 @@ internal class Program
             }
         );
 
-        ImpellerDisplayListSafeHandle displayList;
+        ImpellerDisplayList displayList;
 
         using (var builder = new ImpellerDisplayListBuilder())
         using (var paint = new ImpellerPaint())

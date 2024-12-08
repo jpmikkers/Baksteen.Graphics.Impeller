@@ -14,11 +14,6 @@ public class ImpellerDisplayListBuilder : IDisposable
         _handle = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero).AssertValid();  // todo cullrect
     }
 
-    public ImpellerDisplayListSafeHandle CreateDisplayListNew()
-    {
-        return ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(Handle).AssertValid();
-    }
-
     public void DrawPaint(ImpellerPaint paint)
     {
         ImpellerNative.ImpellerDisplayListBuilderDrawPaint(
@@ -59,6 +54,11 @@ public class ImpellerDisplayListBuilder : IDisposable
             from,
             to,
             paint.Handle);
+    }
+
+    public ImpellerDisplayList CreateDisplayListNew()
+    {
+        return new ImpellerDisplayList(ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(Handle).AssertValid());
     }
 
     protected virtual void Dispose(bool disposing)

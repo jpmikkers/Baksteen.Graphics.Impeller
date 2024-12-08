@@ -2,21 +2,16 @@
 
 using System;
 
-public class ImpellerSurface : IDisposable
+public class ImpellerDisplayList : IDisposable
 {
-    private readonly ImpellerSurfaceSafeHandle _handle;
+    private readonly ImpellerDisplayListSafeHandle _handle;
     private bool disposedValue;
 
-    public ImpellerSurfaceSafeHandle Handle => _handle;
+    public ImpellerDisplayListSafeHandle Handle => _handle;
 
-    public ImpellerSurface(ImpellerContext context, ulong fbo, ImpellerNative.ImpellerPixelFormat pixelFormat, ImpellerNative.ImpellerISize size)
+    internal ImpellerDisplayList(ImpellerDisplayListSafeHandle handle)
     {
-        _handle = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(
-            context.Handle,
-            fbo,
-            pixelFormat,
-            size
-        ).AssertValid();
+        _handle = handle;
     }
 
     protected virtual void Dispose(bool disposing)
@@ -38,10 +33,5 @@ public class ImpellerSurface : IDisposable
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
-    }
-
-    public void DrawDisplayList(ImpellerDisplayList displayList)
-    {
-        ImpellerNative.ImpellerSurfaceDrawDisplayList(_handle, displayList.Handle);
     }
 }
