@@ -80,27 +80,18 @@ internal class Program
 
         Console.WriteLine($"Running impeller version : {ImpellerCooked.GetVersion()}");
 
-        //ImpellerNative.ImpellerProcAddressCallback procAddressCallback = MyProcAddressCallback;
-        //var userData = IntPtr.Zero;
-
-        //using var context = ImpellerNative.ImpellerContextCreateOpenGLESNew(
-        //    ImpellerNative.ImpellerGetVersion(),
-        //    procAddressCallback,
-        //    userData
-        //).AssertValid();
-
         using var context = new ImpellerContext(procName => Glfw.GetProcAddress(procName));
 
-        using var surface = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(
-            context.Handle,
-            0,
+        using var surface = new ImpellerSurface(
+            context,
+            0L,
             ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
             new ImpellerNative.ImpellerISize
             {
                 Width = fbWidth,
                 Height = fbHeight
             }
-        ).AssertValid();
+        );
 
         ImpellerDisplayListSafeHandle displayList;
 
@@ -199,7 +190,7 @@ internal class Program
             {
                 Glfw.PollEvents();
 
-                ImpellerNative.ImpellerSurfaceDrawDisplayList(surface, displayList);
+                surface.DrawDisplayList(displayList);
 
                 Glfw.SwapBuffers(window);
 
