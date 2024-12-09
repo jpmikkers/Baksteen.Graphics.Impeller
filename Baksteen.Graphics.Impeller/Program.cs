@@ -91,6 +91,11 @@ internal class Program
         using (var builder = new ImpellerDisplayListBuilder())
         using (var paint = new ImpellerPaint())
         {
+            //paint.BlendMode = ImpellerNative.ImpellerBlendMode.kImpellerBlendModeDestinationOut;
+
+            builder.Translate(100.5f, 0.5f);
+            builder.Rotate(10.0f);
+
             paint.Color = new()
             {
                 alpha = 1.0f,
@@ -109,9 +114,9 @@ internal class Program
                 red = 1.0f
             };
 
-            paint.DrawStyle = ImpellerNative.ImpellerDrawStyle.kImpellerDrawStyleStroke;
+            paint.DrawStyle = ImpellerNative.ImpellerDrawStyle.kImpellerDrawStyleStrokeAndFill;
             //paint.StrokeCap = ImpellerNative.ImpellerStrokeCap.kImpellerStrokeCapButt;
-            paint.StrokeWidth = 2.0f;
+            paint.StrokeWidth = 10.5f;
             //paint.StrokeMiter = 10.0f;
 
             builder.DrawRect(
@@ -194,7 +199,7 @@ internal class Program
                 },
                 paint);
 
-            displayList = builder.CreateDisplayListNew();
+            displayList = builder.CreateDisplayList();
         }
 
         using (displayList)

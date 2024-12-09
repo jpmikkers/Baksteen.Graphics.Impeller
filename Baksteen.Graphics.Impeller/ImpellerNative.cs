@@ -171,7 +171,7 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerPaintSetColor(
-        ImpellerPaintSafeHandle paint, 
+        ImpellerPaintSafeHandle paint,
         in ImpellerColor color);
 
     /// @brief      Set the paint draw style. The style controls if the closed
@@ -183,6 +183,17 @@ public static class ImpellerNative
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerPaintSetDrawStyle(ImpellerPaintSafeHandle paint,
                                ImpellerDrawStyle style);
+
+    /// @brief      Set the paint blend mode. The blend mode controls how the new
+    ///             paints contents are mixed with the values already drawn using
+    ///             previous draw calls.
+    ///
+    /// @param[in]  paint  The paint.
+    /// @param[in]  mode   The mode.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerPaintSetBlendMode(ImpellerPaintSafeHandle paint,
+                               ImpellerBlendMode mode);
 
     /// @brief      Sets how strokes rendered using this paint are capped.
     ///
@@ -227,7 +238,7 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerDisplayListBuilderDrawPaint(
-        ImpellerDisplayListBuilderSafeHandle builder, 
+        ImpellerDisplayListBuilderSafeHandle builder,
         ImpellerPaintSafeHandle paint);
 
     /// @brief      Draws a rectangle.
@@ -277,10 +288,162 @@ public static class ImpellerNative
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImpellerDisplayListBuilderDrawLine(
-    ImpellerDisplayListBuilderSafeHandle builder,
-    in ImpellerPoint from,
-    in ImpellerPoint to,
-    ImpellerPaintSafeHandle paint);
+        ImpellerDisplayListBuilderSafeHandle builder,
+        in ImpellerPoint from,
+        in ImpellerPoint to,
+        ImpellerPaintSafeHandle paint);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Stashes the current transformation and clip state onto a save
+    ///             stack.
+    ///
+    /// @param[in]  builder  The builder.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderSave(
+        ImpellerDisplayListBuilderSafeHandle builder);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Stashes the current transformation and clip state onto a save
+    ///             stack and creates and creates an offscreen layer onto which
+    ///             subsequent rendering intent will be directed to.
+    ///
+    ///             On the balancing call to restore, the supplied paints filters
+    ///             and blend modes will be used to composite the offscreen contents
+    ///             back onto the display display list.
+    ///
+    /// @param[in]  builder   The builder.
+    /// @param[in]  bounds    The bounds.
+    /// @param[in]  paint     The paint.
+    /// @param[in]  backdrop  The backdrop.
+    ///
+    //[DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    //public static extern void ImpellerDisplayListBuilderSaveLayer(
+    //ImpellerDisplayListBuilderSafeHandle builder,
+    //in ImpellerRect bounds,
+    //ImpellerPaintSafeHandle paint,
+    //ImpellerImageFilter IMPELLER_NULLABLE backdrop);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Pops the last entry pushed onto the save stack using a call to
+    ///             `ImpellerDisplayListBuilderSave` or
+    ///             `ImpellerDisplayListBuilderSaveLayer`.
+    ///
+    /// @param[in]  builder  The builder.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderRestore(
+        ImpellerDisplayListBuilderSafeHandle builder);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Apply a scale to the transformation matrix currently on top of
+    ///             the save stack.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  x_scale  The x scale.
+    /// @param[in]  y_scale  The y scale.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderScale(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        float x_scale,
+        float y_scale);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Apply a clockwise rotation to the transformation matrix
+    ///             currently on top of the save stack.
+    ///
+    /// @param[in]  builder        The builder.
+    /// @param[in]  angle_degrees  The angle in degrees.
+    ///
+
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderRotate(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        float angle_degrees);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Apply a translation to the transformation matrix currently on
+    ///             top of the save stack.
+    ///
+    /// @param[in]  builder        The builder.
+    /// @param[in]  x_translation  The x translation.
+    /// @param[in]  y_translation  The y translation.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderTranslate(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        float x_translation,
+        float y_translation);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Appends the the provided transformation to the transformation
+    ///             already on the save stack.
+    ///
+    /// @param[in]  builder    The builder.
+    /// @param[in]  transform  The transform to append.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderTransform(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        in ImpellerMatrix transform);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Clear the transformation on top of the save stack and replace it
+    ///             with a new value.
+    ///
+    /// @param[in]  builder    The builder.
+    /// @param[in]  transform  The new transform.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderSetTransform(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        in ImpellerMatrix transform);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Get the transformation currently built up on the top of the
+    ///             transformation stack.
+    ///
+    /// @param[in]  builder        The builder.
+    /// @param[out] out_transform  The transform.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderGetTransform(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        out ImpellerMatrix out_transform);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Reset the transformation on top of the transformation stack to
+    ///             identity.
+    ///
+    /// @param[in]  builder  The builder.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderResetTransform(
+        ImpellerDisplayListBuilderSafeHandle builder);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Get the current size of the save stack.
+    ///
+    /// @param[in]  builder  The builder.
+    ///
+    /// @return     The save stack size.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern UInt32 ImpellerDisplayListBuilderGetSaveCount(
+        ImpellerDisplayListBuilderSafeHandle builder);
+
+    //------------------------------------------------------------------------------
+    /// @brief      Effectively calls ImpellerDisplayListBuilderRestore till the
+    ///             size of the save stack becomes a specified count.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  count    The count.
+    ///
+    [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void ImpellerDisplayListBuilderRestoreToCount(
+        ImpellerDisplayListBuilderSafeHandle builder,
+        UInt32 count);
 
     //------------------------------------------------------------------------------
     // Enumerations
@@ -418,6 +581,22 @@ public static class ImpellerNative
     {
         kImpellerTextDirectionRTL,
         kImpellerTextDirectionLTR,
+    }
+
+    //------------------------------------------------------------------------------
+    /// A 4x4 transformation matrix using column-major storage.
+    ///
+    /// ```
+    /// | m[0] m[4] m[8]  m[12] |
+    /// | m[1] m[5] m[9]  m[13] |
+    /// | m[2] m[6] m[10] m[14] |
+    /// | m[3] m[7] m[11] m[15] |
+    /// ```
+    ///
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ImpellerMatrix
+    {
+        public unsafe fixed float m[10];
     }
 
     [StructLayout(LayoutKind.Sequential)]

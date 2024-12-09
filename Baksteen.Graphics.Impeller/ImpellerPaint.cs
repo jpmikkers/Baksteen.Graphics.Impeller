@@ -32,6 +32,14 @@ public class ImpellerPaint : IDisposable
         }
     }
 
+    public ImpellerBlendMode BlendMode
+    {
+        set
+        {
+            ImpellerPaintSetBlendMode(_handle, value);
+        }
+    }
+
     public ImpellerStrokeCap StrokeCap
     {
         get => _strokeCap;
