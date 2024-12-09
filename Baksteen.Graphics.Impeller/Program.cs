@@ -37,6 +37,7 @@ internal class Program
         Glfw.WindowHint(WindowHint.OpenGLForwardCompat, true);
         Glfw.WindowHint(WindowHint.Resizable, true);
         Glfw.WindowHint(WindowHint.Visible, false);
+        Glfw.WindowHint(WindowHint.Samples, 4);     // enable 4x MSAA
 
         var WIDTH = 800;
         var HEIGHT = 600;
