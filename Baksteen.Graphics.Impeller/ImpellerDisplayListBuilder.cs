@@ -252,4 +252,21 @@ public class ImpellerDisplayListBuilder : IDisposable
     {
         ImpellerNative.ImpellerDisplayListBuilderRestoreToCount(Handle, count);
     }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Draws the specified shape.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  path     The path.
+    /// @param[in]  paint    The paint.
+    ///
+    public void DrawPath(
+        ImpellerPath path,
+        ImpellerPaint paint)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderDrawPath(
+            Handle,
+            path.Handle,
+            paint.Handle);
+    }
 }

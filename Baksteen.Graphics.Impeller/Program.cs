@@ -2,6 +2,7 @@
 
 using DotGLFW;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 internal class Program
@@ -94,8 +95,8 @@ internal class Program
         {
             //paint.BlendMode = ImpellerNative.ImpellerBlendMode.kImpellerBlendModeDestinationOut;
 
-            builder.Translate(100.5f, 0.5f);
-            builder.Rotate(10.0f);
+            //builder.Translate(100.5f, 0.5f);
+            //builder.Rotate(10.0f);
 
             paint.Color = new()
             {
@@ -191,24 +192,47 @@ internal class Program
                 new ImpellerNative.ImpellerPoint
                 {
                     x=10,
-                    y=200
+                    y=150
                 },
                 new ImpellerNative.ImpellerPoint
                 {
                     x=200,
-                    y=300
+                    y=250
                 },
                 paint);
 
+            using (var pathBuilder = new ImpellerPathBuilder())
+            {
+                pathBuilder.MoveTo(new ImpellerNative.ImpellerPoint { x = 70, y = 270 });
+                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 230, y = 270 });
+                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 100, y = 390 });
+                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 150, y = 200 });
+                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 200, y = 390 });
+                pathBuilder.Close();
+
+
+                paint.Color = new()
+                {
+                    alpha = 1.0f,
+                    blue = 0.5f,
+                    green = 0.2f,
+                    red = 0.7f
+                };
+
+                using var pathodd = pathBuilder.CopyPathNew(ImpellerNative.ImpellerFillType.kImpellerFillTypeOdd);
+                builder.DrawPath(pathodd, paint);
+
+                builder.Translate(200, 0);
+                using var pathnzr = pathBuilder.CopyPathNew(ImpellerNative.ImpellerFillType.kImpellerFillTypeNonZero);
+                builder.DrawPath(pathnzr, paint);
+            }
             displayList = builder.CreateDisplayList();
         }
-
         using (displayList)
         {
             while (!Glfw.WindowShouldClose(window))
             {
                 Glfw.PollEvents();
-
                 surface.DrawDisplayList(displayList);
 
                 Glfw.SwapBuffers(window);
