@@ -13,7 +13,9 @@ public class ImpellerDisplayListBuilder : IDisposable
 
     public ImpellerDisplayListBuilder()
     {
-        _handle = ImpellerNative.ImpellerDisplayListBuilderNew(IntPtr.Zero).AssertValid();  // todo cullrect
+        _handle = ImpellerNative.ImpellerDisplayListBuilderNew(
+            new ImpellerRect { x = 0, y = 0, width = 800, height = 600 }                // TODO FIX ME
+            ).AssertValid();  // todo cullrect
     }
 
     public void DrawPaint(ImpellerPaint paint)

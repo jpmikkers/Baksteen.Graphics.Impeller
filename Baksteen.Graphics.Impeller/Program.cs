@@ -82,8 +82,8 @@ internal class Program
             ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
             new ImpellerNative.ImpellerISize
             {
-                Width = fbWidth,
-                Height = fbHeight
+                width = fbWidth,
+                height = fbHeight
             }
         );
 
