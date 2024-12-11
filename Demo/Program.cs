@@ -1,9 +1,10 @@
-﻿namespace Baksteen.Graphics.Impeller;
+﻿namespace ImpellerDemo;
 
 using DotGLFW;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Baksteen.Graphics.Impeller;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
 
 internal class Program

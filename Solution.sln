@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baksteen.Graphics.Impeller", "Baksteen.Graphics.Impeller\Baksteen.Graphics.Impeller.csproj", "{20F3D761-4FED-4525-89DB-30DF46A5A212}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImpellerDemo", "Demo\ImpellerDemo.csproj", "{42CB5377-49D8-4FF4-AC53-D4DD931009FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{20F3D761-4FED-4525-89DB-30DF46A5A212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20F3D761-4FED-4525-89DB-30DF46A5A212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20F3D761-4FED-4525-89DB-30DF46A5A212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42CB5377-49D8-4FF4-AC53-D4DD931009FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42CB5377-49D8-4FF4-AC53-D4DD931009FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42CB5377-49D8-4FF4-AC53-D4DD931009FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42CB5377-49D8-4FF4-AC53-D4DD931009FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
