@@ -104,6 +104,8 @@ $src = $src -replace '(?m)public enum ([a-zA-Z0-9_]+) \{',('public enum $1' + "`
 # move struct opening curly bracket to new line
 $src = $src -replace '(?m)public struct ([a-zA-Z0-9_]+) \{',('public struct $1' + "`n{")
 
+$src = $src -replace '(?m)const ImpellerColor\*\s+colors', 'ImpellerColor[] colors'
+
 $src = $src -replace '(?m)const ImpellerISize\*\s+([a-zA-Z0-9_]+)', 'in ImpellerISize $1'
 $src = $src -replace '(?m)const ImpellerRect\*\s+([a-zA-Z0-9_]+)', 'in ImpellerRect $1'
 $src = $src -replace '(?m)const ImpellerPoint\*\s+([a-zA-Z0-9_]+)', 'in ImpellerPoint $1'
