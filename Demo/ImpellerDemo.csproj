@@ -16,10 +16,4 @@
     <ProjectReference Include="..\Baksteen.Graphics.Impeller\Baksteen.Graphics.Impeller.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="impeller_sdk\lib\impeller.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
