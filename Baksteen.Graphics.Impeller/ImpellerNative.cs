@@ -1267,7 +1267,7 @@ ImpellerPaintNew();
         in ImpellerPoint start_point,
         in ImpellerPoint end_point,
         uint stop_count,
-        in ImpellerColor colors,
+        ImpellerColor[] colors,
         float[] stops,
         ImpellerTileMode tile_mode,
         in ImpellerMatrix transformation);
@@ -1291,7 +1291,7 @@ ImpellerPaintNew();
         in ImpellerPoint center,
         float radius,
         uint stop_count,
-        in ImpellerColor colors,
+        ImpellerColor[] colors,
         float[] stops,
         ImpellerTileMode tile_mode,
         in ImpellerMatrix transformation);
@@ -1319,7 +1319,7 @@ ImpellerPaintNew();
         in ImpellerPoint end_center,
         float end_radius,
         uint stop_count,
-        in ImpellerColor colors,
+        ImpellerColor[] colors,
         float[] stops,
         ImpellerTileMode tile_mode,
         in ImpellerMatrix transformation);
@@ -1345,7 +1345,7 @@ ImpellerPaintNew();
         float start,
         float end,
         uint stop_count,
-        in ImpellerColor colors,
+        ImpellerColor[] colors,
         float[] stops,
         ImpellerTileMode tile_mode,
         in ImpellerMatrix transformation);

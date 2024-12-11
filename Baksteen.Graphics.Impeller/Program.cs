@@ -4,6 +4,7 @@ using DotGLFW;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using static Baksteen.Graphics.Impeller.ImpellerNative;
 
 internal class Program
 {
@@ -80,8 +81,8 @@ internal class Program
         using var surface = new ImpellerSurface(
             context,
             0L,
-            ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
-            new ImpellerNative.ImpellerISize
+            ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
+            new ImpellerISize
             {
                 width = fbWidth,
                 height = fbHeight
@@ -90,10 +91,71 @@ internal class Program
 
         ImpellerDisplayList displayList;
 
+        var mat = new ImpellerMatrix();
+
+        unsafe
+        {
+            var m = mat.m;
+
+            m[0] = 1; m[4] = 0; m[8] = 0; m[12] = 0;
+            m[1] = 0; m[5] = 1; m[9] = 0; m[13] = 0;
+            m[2] = 0; m[6] = 0; m[10] = 1; m[14] = 0;
+            m[3] = 0; m[7] = 0; m[11] = 0; m[15] = 1;
+        }
+
+        var lingradcolors = new[]
+        {
+            new ImpellerColor(){ alpha = 1, red = 0, green = 0, blue = 0 },
+            new ImpellerColor(){ alpha = 1, red = 1, green = 1, blue = 1 }
+        };
+
+        using var linearGradientColorSource = ImpellerColorSource.CreateLinearGradient(
+            new()
+            {
+                x = 50,
+                y = 0,
+            },
+            new()
+            {
+                x = 50,
+                y = 50,
+            },
+            2,
+            lingradcolors,
+            new float[]
+            {
+                0,
+                1
+            },
+            ImpellerTileMode.kImpellerTileModeMirror,
+            mat);
+
+        using var radialGradientColorSource = ImpellerColorSource.CreateRadialGradient(
+            new()
+            {
+                x = 160,
+                y = 250,
+            },
+            20,
+            2,
+            new[]
+            {
+                new ImpellerColor(){ alpha = 1, red = 1, green = 0, blue = 0 },
+                new ImpellerColor(){ alpha = 1, red = 0, green = 0.5f, blue = 1 }
+            },
+            new float[]
+            {
+                0,
+                1
+            },
+            ImpellerTileMode.kImpellerTileModeMirror,
+            mat
+        );
+
         using (var builder = new ImpellerDisplayListBuilder())
         using (var paint = new ImpellerPaint())
         {
-            //paint.BlendMode = ImpellerNative.ImpellerBlendMode.kImpellerBlendModeDestinationOut;
+            //paint.BlendMode = ImpellerBlendMode.kImpellerBlendModeDestinationOut;
 
             //builder.Translate(100.5f, 0.5f);
             //builder.Rotate(10.0f);
@@ -116,13 +178,13 @@ internal class Program
                 red = 1.0f
             };
 
-            paint.DrawStyle = ImpellerNative.ImpellerDrawStyle.kImpellerDrawStyleStrokeAndFill;
-            //paint.StrokeCap = ImpellerNative.ImpellerStrokeCap.kImpellerStrokeCapButt;
+            paint.DrawStyle = ImpellerDrawStyle.kImpellerDrawStyleStrokeAndFill;
+            //paint.StrokeCap = ImpellerStrokeCap.kImpellerStrokeCapButt;
             paint.StrokeWidth = 10.5f;
             //paint.StrokeMiter = 10.0f;
 
             builder.DrawRect(
-              new ImpellerNative.ImpellerRect
+              new ImpellerRect
               {
                   x = 10,
                   y = 10,
@@ -140,14 +202,14 @@ internal class Program
             };
 
             builder.DrawRoundedRect(
-                new ImpellerNative.ImpellerRect
+                new ImpellerRect
                 {
                     x = 150,
                     y = 10,
                     width = 100,
                     height = 100
                 },
-                new ImpellerNative.ImpellerRoundingRadii
+                new ImpellerRoundingRadii
                 {
                     top_left = new() { x = 20, y = 20 },
                     bottom_left = new() { x = 20, y = 20 },
@@ -167,7 +229,7 @@ internal class Program
             };
 
             builder.DrawOval(
-                new ImpellerNative.ImpellerRect
+                new ImpellerRect
                 {
                     x = 290,
                     y = 10,
@@ -186,15 +248,15 @@ internal class Program
             };
 
             paint.StrokeWidth = 20;
-            paint.StrokeCap = ImpellerNative.ImpellerStrokeCap.kImpellerStrokeCapButt;
+            paint.StrokeCap = ImpellerStrokeCap.kImpellerStrokeCapButt;
 
             builder.DrawLine(
-                new ImpellerNative.ImpellerPoint
+                new ImpellerPoint
                 {
                     x=10,
                     y=150
                 },
-                new ImpellerNative.ImpellerPoint
+                new ImpellerPoint
                 {
                     x=200,
                     y=250
@@ -203,14 +265,14 @@ internal class Program
 
             using (var pathBuilder = new ImpellerPathBuilder())
             {
-                pathBuilder.MoveTo(new ImpellerNative.ImpellerPoint { x = 70, y = 270 });
-                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 230, y = 270 });
-                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 100, y = 390 });
-                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 150, y = 200 });
-                pathBuilder.LineTo(new ImpellerNative.ImpellerPoint { x = 200, y = 390 });
+                pathBuilder.MoveTo(new ImpellerPoint { x = 70, y = 270 });
+                pathBuilder.LineTo(new ImpellerPoint { x = 230, y = 270 });
+                pathBuilder.LineTo(new ImpellerPoint { x = 100, y = 390 });
+                pathBuilder.LineTo(new ImpellerPoint { x = 150, y = 200 });
+                pathBuilder.LineTo(new ImpellerPoint { x = 200, y = 390 });
                 pathBuilder.Close();
 
-
+                paint.ColorSource = linearGradientColorSource;
                 paint.Color = new()
                 {
                     alpha = 1.0f,
@@ -219,11 +281,14 @@ internal class Program
                     red = 0.7f
                 };
 
-                using var pathodd = pathBuilder.CopyPathNew(ImpellerNative.ImpellerFillType.kImpellerFillTypeOdd);
+                using var pathodd = pathBuilder.CopyPathNew(ImpellerFillType.kImpellerFillTypeOdd);
                 builder.DrawPath(pathodd, paint);
 
                 builder.Translate(200, 0);
-                using var pathnzr = pathBuilder.CopyPathNew(ImpellerNative.ImpellerFillType.kImpellerFillTypeNonZero);
+
+                paint.ColorSource = radialGradientColorSource;
+
+                using var pathnzr = pathBuilder.CopyPathNew(ImpellerFillType.kImpellerFillTypeNonZero);
                 builder.DrawPath(pathnzr, paint);
             }
             displayList = builder.CreateDisplayList();

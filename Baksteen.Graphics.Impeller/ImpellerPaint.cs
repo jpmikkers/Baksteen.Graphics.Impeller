@@ -1,7 +1,10 @@
 ﻿namespace Baksteen.Graphics.Impeller;
 
 using System;
+using System.IO;
+using System.Net;
 using DotGLFW;
+using static System.Formats.Asn1.AsnWriter;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
 
 public class ImpellerPaint : IDisposable
@@ -58,6 +61,11 @@ public class ImpellerPaint : IDisposable
             _strokeJoin = value;
             ImpellerPaintSetStrokeJoin(_handle, _strokeJoin);
         }
+    }
+
+    public ImpellerColorSource ColorSource
+    {
+        set => ImpellerPaintSetColorSource(_handle, value.Handle);
     }
 
     public float StrokeWidth
