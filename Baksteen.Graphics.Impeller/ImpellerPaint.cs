@@ -67,6 +67,11 @@ public class ImpellerPaint : IDisposable
         set => ImpellerPaintSetColorSource(_handle, value.Handle);
     }
 
+    public ImpellerMaskFilter MaskFilter
+    {
+        set => ImpellerPaintSetMaskFilter(_handle, value.Handle);
+    }
+
     public float StrokeWidth
     {
         get => _strokeWidth;

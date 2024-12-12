@@ -291,7 +291,15 @@ internal class Program
 
                 using var pathnzr = pathBuilder.CopyPathNew(ImpellerFillType.kImpellerFillTypeNonZero);
                 builder.DrawPath(pathnzr, paint);
+
+                using var maskFilter = ImpellerMaskFilter.CreateBlur(ImpellerBlurStyle.kImpellerBlurStyleNormal, 4.0f);
+
+                builder.Translate(200, 0);
+
+                paint.MaskFilter = maskFilter;
+                builder.DrawPath(pathnzr, paint);
             }
+
             displayList = builder.CreateDisplayList();
         }
         using (displayList)
