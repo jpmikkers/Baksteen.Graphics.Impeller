@@ -167,7 +167,7 @@ public class ImpellerColorSource : IDisposable
     /// @return     The color source.
     ///
     public static ImpellerColorSource CreateImage(
-        ImpellerTextureSafeHandle image,
+        ImpellerTexture image,
         ImpellerTileMode horizontal_tile_mode,
         ImpellerTileMode vertical_tile_mode,
         ImpellerTextureSampling sampling,
@@ -175,7 +175,7 @@ public class ImpellerColorSource : IDisposable
     {
         return new ImpellerColorSource(
             ImpellerColorSourceCreateImageNew(
-            image,
+            image.Handle,
             horizontal_tile_mode,
             vertical_tile_mode,
             sampling,

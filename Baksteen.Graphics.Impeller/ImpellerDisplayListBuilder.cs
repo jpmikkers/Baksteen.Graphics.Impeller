@@ -269,4 +269,53 @@ public class ImpellerDisplayListBuilder : IDisposable
             path.Handle,
             paint.Handle);
     }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Draw a texture at the specified point.
+    ///
+    /// @param[in]  builder   The builder.
+    /// @param[in]  texture   The texture.
+    /// @param[in]  point     The point.
+    /// @param[in]  sampling  The sampling.
+    /// @param[in]  paint     The paint.
+    ///
+    public void DrawTexture(        
+        ImpellerTexture texture,
+        in ImpellerPoint point,
+        ImpellerTextureSampling sampling,
+        ImpellerPaint paint)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderDrawTexture(
+            Handle,
+            texture.Handle,
+            point,
+            sampling,
+            paint.Handle);
+    }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Draw a portion of texture at the specified location.
+    ///
+    /// @param[in]  builder   The builder.
+    /// @param[in]  texture   The texture.
+    /// @param[in]  src_rect  The source rectangle.
+    /// @param[in]  dst_rect  The destination rectangle.
+    /// @param[in]  sampling  The sampling.
+    /// @param[in]  paint     The paint.
+    ///
+    public void DrawTextureRect(
+        ImpellerTexture texture,
+        in ImpellerRect src_rect,
+        in ImpellerRect dst_rect,
+        ImpellerTextureSampling sampling,
+        ImpellerPaint paint)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderDrawTextureRect(
+            Handle,
+            texture.Handle,
+            src_rect,
+            dst_rect,
+            sampling,
+            paint.Handle);
+    }
 }

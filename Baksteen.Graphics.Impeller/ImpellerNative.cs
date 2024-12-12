@@ -609,9 +609,9 @@ public static class ImpellerNative
     [StructLayout(LayoutKind.Sequential)]
     public struct ImpellerMapping
     {
-        public byte[] data;
+        public IntPtr data;
         public ulong length;
-        ImpellerCallback on_release;
+        public ImpellerCallback on_release;
     }
 
     //------------------------------------------------------------------------------

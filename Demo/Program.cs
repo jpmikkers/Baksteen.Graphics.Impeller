@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Baksteen.Graphics.Impeller;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 internal class Program
 {
@@ -22,6 +23,50 @@ internal class Program
                 0, 0, 255, 255
             ]
         };
+    }
+
+    private static ImpellerTexture CreateImageTexture(ImpellerContext context)
+    {
+        var data = new byte[16 * 16 * 4];
+
+        // draw a white crossed box with a gradient in the background
+        for (var y = 0; y < 16; y++)
+        {
+            for (var x = 0; x < 16; x++)
+            {
+                if (x == y || x == (15 - y) || x == 0 || x == 15 || y == 0 || y == 15)
+                {
+                    data[(y * 16 + x) * 4 + 0] = 0xFF;  // R
+                    data[(y * 16 + x) * 4 + 1] = 0xFF;  // G
+                    data[(y * 16 + x) * 4 + 2] = 0xFF;  // B
+                    data[(y * 16 + x) * 4 + 3] = 0xFF;  // A .. no effect?
+                }
+                else
+                {
+                    data[(y * 16 + x) * 4 + 0] = 0x80;              // R
+                    data[(y * 16 + x) * 4 + 1] = (byte)(x * 16);      // G
+                    data[(y * 16 + x) * 4 + 2] = (byte)(y * 16);      // B
+                    data[(y * 16 + x) * 4 + 3] = 0xFF;  // A
+                }
+            }
+        }
+
+        return ImpellerTexture.CreateWithContents(
+            context,
+            new ImpellerTextureDescriptor
+            {
+                pixel_format = ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
+                mip_count = 1,
+                size = new ImpellerISize
+                {
+                    width = 16,
+                    height = 16
+                }
+            },
+            data,
+            x => { Console.WriteLine("I was called!"); },
+            IntPtr.Zero
+        );
     }
 
     static void Main(string[] args)
@@ -165,11 +210,11 @@ internal class Program
             {
                 alpha = 1.0f,
                 blue = 0.0f,
-                green = 1.0f,
-                red = 1.0f
+                green = 0.0f,
+                red = 0.0f
             };
 
-            builder.DrawPaint( paint );
+            builder.DrawPaint(paint);
 
             paint.Color = new()
             {
@@ -195,7 +240,8 @@ internal class Program
               paint);
 
             // draw rounded rectangle
-            paint.Color = new() {
+            paint.Color = new()
+            {
                 alpha = 1.0f,
                 blue = 1.0f,
                 green = 0.0f,
@@ -254,15 +300,37 @@ internal class Program
             builder.DrawLine(
                 new ImpellerPoint
                 {
-                    x=10,
-                    y=150
+                    x = 10,
+                    y = 150
                 },
                 new ImpellerPoint
                 {
-                    x=200,
-                    y=250
+                    x = 200,
+                    y = 250
                 },
                 paint);
+
+            using var texture = CreateImageTexture(context);
+            using var texturepaint = new ImpellerPaint();
+
+            builder.DrawTextureRect(
+                texture,
+                new()
+                {
+                    x = 0,
+                    y = 0,
+                    width = 16,
+                    height = 16
+                },
+                new()
+                {
+                    x = 450,
+                    y = 10,
+                    width = 100,
+                    height = 100,
+                },
+                ImpellerTextureSampling.kImpellerTextureSamplingNearestNeighbor,
+                texturepaint);
 
             using (var pathBuilder = new ImpellerPathBuilder())
             {
@@ -292,16 +360,17 @@ internal class Program
                 using var pathnzr = pathBuilder.CopyPathNew(ImpellerFillType.kImpellerFillTypeNonZero);
                 builder.DrawPath(pathnzr, paint);
 
-                using var maskFilter = ImpellerMaskFilter.CreateBlur(ImpellerBlurStyle.kImpellerBlurStyleNormal, 4.0f);
-
                 builder.Translate(200, 0);
-
+                using var maskFilter = ImpellerMaskFilter.CreateBlur(ImpellerBlurStyle.kImpellerBlurStyleNormal, 4.0f);
                 paint.MaskFilter = maskFilter;
                 builder.DrawPath(pathnzr, paint);
             }
 
             displayList = builder.CreateDisplayList();
         }
+
+        Console.WriteLine("here!");
+
         using (displayList)
         {
             while (!Glfw.WindowShouldClose(window))
@@ -315,4 +384,5 @@ internal class Program
             }
         }
     }
+
 }
