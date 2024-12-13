@@ -384,6 +384,9 @@ internal class Program
             displayList = builder.CreateDisplayList();
         }
 
+        using var typographyContext = new ImpellerTypographyContext();
+        typographyContext.RegisterFont("Ubuntu-Regular.ttf", "ubuntu");
+
         Console.WriteLine("here!");
 
         using (displayList)

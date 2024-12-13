@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Baksteen.Graphics.Impeller\Baksteen.Graphics.Impeller.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Ubuntu-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
