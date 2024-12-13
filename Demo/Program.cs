@@ -387,6 +387,20 @@ internal class Program
         using var typographyContext = new ImpellerTypographyContext();
         typographyContext.RegisterFont("Ubuntu-Regular.ttf", "ubuntu");
 
+        using var paragraphStyle = new ImpellerParagraphStyle();
+
+        paragraphStyle.Background = new ImpellerPaint { Color = new() { alpha = 1.0f, red = 0.0f, green = 0.0f, blue = 0.0f } };
+        paragraphStyle.Foreground = new ImpellerPaint { Color = new() { alpha = 1.0f, red = 1.0f, green = 1.0f, blue = 1.0f } };
+        paragraphStyle.FontFamily = "ubuntu";
+        paragraphStyle.FontSize = 10.0f;
+        paragraphStyle.FontStyle = ImpellerFontStyle.kImpellerFontStyleNormal;
+        paragraphStyle.FontWeight = ImpellerFontWeight.kImpellerFontWeight100;
+        paragraphStyle.Height = 0.0f;
+        paragraphStyle.MaxLines = 100;
+        paragraphStyle.TextAlignment = ImpellerTextAlignment.kImpellerTextAlignmentLeft;
+        paragraphStyle.TextDirection = ImpellerTextDirection.kImpellerTextDirectionLTR;
+        paragraphStyle.Locale = "en-US";
+
         Console.WriteLine("here!");
 
         using (displayList)
