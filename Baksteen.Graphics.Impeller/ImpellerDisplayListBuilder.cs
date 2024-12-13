@@ -254,6 +254,82 @@ public class ImpellerDisplayListBuilder : IDisposable
     }
 
     //------------------------------------------------------------------------------
+    /// @brief      Reduces the clip region to the intersection of the current clip
+    ///             and the given rectangle taking into account the clip operation.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  rect     The rectangle.
+    /// @param[in]  op       The operation.
+    ///
+    public void ClipRect(
+        in ImpellerRect rect,
+        ImpellerClipOperation op)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderClipRect(
+            Handle,
+            rect,
+            op);
+    }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Reduces the clip region to the intersection of the current clip
+    ///             and the given oval taking into account the clip operation.
+    ///
+    /// @param[in]  builder      The builder.
+    /// @param[in]  oval_bounds  The oval bounds.
+    /// @param[in]  op           The operation.
+    ///
+    public void ClipOval(
+        in ImpellerRect oval_bounds,
+        ImpellerClipOperation op)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderClipOval(
+            Handle,
+            oval_bounds,
+            op);
+    }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Reduces the clip region to the intersection of the current clip
+    ///             and the given rounded rectangle taking into account the clip
+    ///             operation.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  rect     The rectangle.
+    /// @param[in]  radii    The radii.
+    /// @param[in]  op       The operation.
+    ///
+    public void ClipRoundedRect(
+        in ImpellerRect rect,
+        in ImpellerRoundingRadii radii,
+        ImpellerClipOperation op)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderClipRoundedRect(
+            Handle,
+            rect,
+            radii,
+            op);
+    }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Reduces the clip region to the intersection of the current clip
+    ///             and the given path taking into account the clip operation.
+    ///
+    /// @param[in]  builder  The builder.
+    /// @param[in]  path     The path.
+    /// @param[in]  op       The operation.
+    ///
+    public void ClipPath(
+        ImpellerPath path,
+        ImpellerClipOperation op)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderClipPath(
+            Handle,
+            path.Handle,
+            op);
+    }
+
+    //------------------------------------------------------------------------------
     /// @brief      Draws the specified shape.
     ///
     /// @param[in]  builder  The builder.
