@@ -310,6 +310,21 @@ internal class Program
                 },
                 paint);
 
+            builder.DrawDashedLine(
+                new ImpellerPoint
+                {
+                    x = 110,
+                    y = 150
+                },
+                new ImpellerPoint
+                {
+                    x = 300,
+                    y = 250
+                },
+                10.0f,
+                10.0f,
+                paint);
+
             using var texture = CreateImageTexture(context);
             using var texturepaint = new ImpellerPaint();
 

@@ -60,6 +60,32 @@ public class ImpellerDisplayListBuilder : IDisposable
             paint.Handle);
     }
 
+    //------------------------------------------------------------------------------
+    /// @brief      Draws a dash line segment.
+    ///
+    /// @param[in]  builder     The builder.
+    /// @param[in]  from        The starting point of the line.
+    /// @param[in]  to          The end point of the line.
+    /// @param[in]  on_length   On length.
+    /// @param[in]  off_length  Off length.
+    /// @param[in]  paint       The paint.
+    ///
+    public void DrawDashedLine(
+        in ImpellerPoint from,
+        in ImpellerPoint to,
+        float on_length,
+        float off_length,
+        ImpellerPaint paint)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderDrawDashedLine(
+            Handle,
+            from,
+            to,
+            on_length,
+            off_length,
+            paint.Handle);
+    }
+
     public ImpellerDisplayList CreateDisplayList()
     {
         return new ImpellerDisplayList(ImpellerNative.ImpellerDisplayListBuilderCreateDisplayListNew(Handle).AssertValid());
