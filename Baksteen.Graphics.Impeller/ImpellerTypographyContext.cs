@@ -38,6 +38,10 @@ public class ImpellerTypographyContext : IDisposable
         GC.SuppressFinalize(this);
     }
 
+    private static void DummyCallback(IntPtr userdata)
+    {
+    }
+
     //------------------------------------------------------------------------------
     /// @brief      Register a custom font.
     ///
@@ -80,9 +84,7 @@ public class ImpellerTypographyContext : IDisposable
     ///
     public void RegisterFont(
         byte[] fontData,
-        string family_name_alias,
-        Action<IntPtr> onReleaseCallback,
-        IntPtr contents_on_release_user_data)
+        string family_name_alias)
     {
         var unmanagedPointer = Marshal.AllocHGlobal(fontData.Length);
         Marshal.Copy(fontData, 0, unmanagedPointer, fontData.Length);
@@ -95,9 +97,9 @@ public class ImpellerTypographyContext : IDisposable
                 {
                     data = unmanagedPointer,
                     length = (ulong)fontData.Length,
-                    on_release = x => onReleaseCallback(x)
+                    on_release = DummyCallback,     // TODO: it seems the callback is never called, impeller bug?
                 },
-                contents_on_release_user_data,
+                IntPtr.Zero,    // contents_on_release_user_data,
                 family_name_alias))
             {
                 throw new Exception($"could not load font with alias {family_name_alias}");
@@ -105,7 +107,8 @@ public class ImpellerTypographyContext : IDisposable
         }
         finally
         {
-            Marshal.FreeHGlobal(unmanagedPointer);
+            // TODO: only free font when context disappears. Impeller keeps referring to the passed pointer!
+            //Marshal.FreeHGlobal(unmanagedPointer);
         }
     }
 
@@ -113,12 +116,24 @@ public class ImpellerTypographyContext : IDisposable
     {
         using var ms = new MemoryStream();
         fontStream.CopyTo(ms);
-        RegisterFont(ms.ToArray(), family_name_alias, x => { }, IntPtr.Zero);
+        RegisterFont(ms.ToArray(), family_name_alias);
     }
 
     public void RegisterFont(string fontPath, string family_name_alias)
     {
         using var fontStream = File.OpenRead(fontPath);
         RegisterFont(fontStream, family_name_alias);
+    }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Create a new paragraph builder.
+    ///
+    /// @param[in]  context  The context.
+    ///
+    /// @return     The paragraph builder.
+    ///
+    public ImpellerParagraphBuilder ParagraphBuilderNew()
+    {
+        return new ImpellerParagraphBuilder(ImpellerNative.ImpellerParagraphBuilderNew(Handle).AssertValid());
     }
 }

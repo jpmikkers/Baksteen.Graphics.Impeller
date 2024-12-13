@@ -420,4 +420,21 @@ public class ImpellerDisplayListBuilder : IDisposable
             sampling,
             paint.Handle);
     }
+
+    //------------------------------------------------------------------------------
+    /// @brief      Draw a paragraph at the specified point.
+    ///
+    /// @param[in]  builder    The builder.
+    /// @param[in]  paragraph  The paragraph.
+    /// @param[in]  point      The point.
+    ///
+    public void DrawParagraph(
+        ImpellerParagraph paragraph,
+        in ImpellerPoint point)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderDrawParagraph(
+            Handle,
+            paragraph.Handle,
+            point);
+    }
 }
