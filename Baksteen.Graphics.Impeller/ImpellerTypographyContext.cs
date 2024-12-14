@@ -3,12 +3,14 @@
 using System;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
+
 
 public class ImpellerTypographyContext : IDisposable
 {
-    private readonly ImpellerTypographyContextSafeHandle _handle;
     private bool disposedValue;
+
+    private readonly ImpellerTypographyContextSafeHandle _handle;
+    private readonly Dictionary<string, HGlobalSafeHandle> _fonts = [];
 
     public ImpellerTypographyContextSafeHandle Handle => _handle;
 
@@ -24,9 +26,12 @@ public class ImpellerTypographyContext : IDisposable
             if (disposing)
             {
                 _handle.Dispose();
+                foreach (var fonthandle in _fonts.Values)
+                {
+                    fonthandle.Dispose();
+                }
+                _fonts.Clear();
             }
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
             disposedValue = true;
         }
     }
@@ -86,29 +91,26 @@ public class ImpellerTypographyContext : IDisposable
         byte[] fontData,
         string family_name_alias)
     {
-        var unmanagedPointer = Marshal.AllocHGlobal(fontData.Length);
-        Marshal.Copy(fontData, 0, unmanagedPointer, fontData.Length);
+        var unmanagedPointer = new HGlobalSafeHandle(Marshal.AllocHGlobal(fontData.Length),true).AssertValid();
+        Marshal.Copy(fontData, 0, unmanagedPointer.DangerousGetHandle(), fontData.Length);
 
-        try
-        {
-            if (!ImpellerNative.ImpellerTypographyContextRegisterFont(
-                Handle,
-                new ImpellerMapping
-                {
-                    data = unmanagedPointer,
-                    length = (ulong)fontData.Length,
-                    on_release = DummyCallback,     // TODO: it seems the callback is never called, impeller bug?
-                },
-                IntPtr.Zero,    // contents_on_release_user_data,
-                family_name_alias))
+        if (ImpellerNative.ImpellerTypographyContextRegisterFont(
+            Handle,
+            new ImpellerMapping
             {
-                throw new Exception($"could not load font with alias {family_name_alias}");
-            }
-        }
-        finally
+                data = unmanagedPointer.DangerousGetHandle(),
+                length = (ulong)fontData.Length,
+                on_release = DummyCallback,     // TODO: it seems the callback is never called, impeller bug?
+            },
+            IntPtr.Zero,    // contents_on_release_user_data,
+            family_name_alias))
         {
-            // TODO: only free font when context disappears. Impeller keeps referring to the passed pointer!
-            //Marshal.FreeHGlobal(unmanagedPointer);
+            _fonts[family_name_alias] = unmanagedPointer;
+        }
+        else
+        {
+            unmanagedPointer.Dispose();
+            throw new Exception($"could not load font with alias {family_name_alias}");
         }
     }
 
