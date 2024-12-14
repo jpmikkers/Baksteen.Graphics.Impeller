@@ -412,7 +412,34 @@ internal class Program
 
             using var paragraphBuilder = typographyContext.ParagraphBuilderNew();
             paragraphBuilder.PushStyle(paragraphStyle);
-            paragraphBuilder.ImpellerParagraphBuilderAddText("Hello Impeller!");
+            paragraphBuilder.ImpellerParagraphBuilderAddText("Hello ");
+            paragraphStyle.FontSize = 80.0f;
+            paragraphStyle.Foreground = new ImpellerPaint
+            {
+                Color = new()
+                {
+                    alpha = 1.0f,
+                    red = 1.0f,
+                    green = 0.0f,
+                    blue = 1.0f
+                },
+                DrawStyle = ImpellerDrawStyle.kImpellerDrawStyleStroke,
+                StrokeWidth = 3.0f
+            };
+            paragraphStyle.Background = new ImpellerPaint
+            {
+                Color = new()
+                {
+                    alpha = 1.0f,
+                    red = 0.0f,
+                    green = 0.0f,
+                    blue = 0.5f
+                },
+                DrawStyle = ImpellerDrawStyle.kImpellerDrawStyleStrokeAndFill,
+                StrokeWidth = 3.0f
+            };
+            paragraphBuilder.PushStyle(paragraphStyle);
+            paragraphBuilder.ImpellerParagraphBuilderAddText("Impeller!");
             using var paragraph = paragraphBuilder.BuildParagraphNew(800.0f);
             builder.DrawParagraph(paragraph,new ImpellerPoint { x = 0.0f, y = 450.0f });
 
