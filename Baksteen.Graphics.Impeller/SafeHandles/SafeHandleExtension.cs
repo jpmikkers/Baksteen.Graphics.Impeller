@@ -13,7 +13,7 @@ public static class SafeHandleExtension
     {
         if (sh.IsInvalid)
         {
-            throw new InvalidOperationException($"invalid {nameof(T)}");
+            throw new InvalidOperationException($"invalid handle '{typeof(T).Name}'");
         }
         return sh;
     }
