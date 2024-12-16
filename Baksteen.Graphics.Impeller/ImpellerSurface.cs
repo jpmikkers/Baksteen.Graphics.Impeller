@@ -9,13 +9,19 @@ public class ImpellerSurface : IDisposable
 
     public ImpellerSurfaceSafeHandle Handle => _handle;
 
-    public ImpellerSurface(ImpellerContext context, ulong fbo, ImpellerNative.ImpellerPixelFormat pixelFormat, ImpellerNative.ImpellerISize size)
+    public int Width{get;private set;}
+    public int Height{get;private set;}
+
+    public ImpellerSurface(ImpellerContext context, ulong fbo, int width, int height)
     {
+        Width = width;
+        Height = height;
+
         _handle = ImpellerNative.ImpellerSurfaceCreateWrappedFBONew(
             context.Handle,
             fbo,
-            pixelFormat,
-            size
+            ImpellerNative.ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
+            new ImpellerNative.ImpellerISize { width =  Width, height = Height }
         ).AssertValid();
     }
 

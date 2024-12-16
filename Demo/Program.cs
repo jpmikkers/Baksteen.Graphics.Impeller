@@ -130,12 +130,8 @@ internal class Program
         using var surface = new ImpellerSurface(
             context,
             0L,
-            ImpellerPixelFormat.kImpellerPixelFormatRGBA8888,
-            new ImpellerISize
-            {
-                width = fbWidth,
-                height = fbHeight
-            }
+            fbWidth,
+            fbHeight
         );
 
         ImpellerDisplayList displayList;
