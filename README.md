@@ -6,4 +6,4 @@ This is a csharp demo project that uses Flutter's [Impeller](https://github.com/
 
 ![impellerdemo](https://github.com/user-attachments/assets/0ecbf80e-ed26-451a-8811-16ac2aecfd52)
 
-![impellerdemo_avalonia](https://github.com/user-attachments/assets/bd428f35-02a1-42a9-8982-62df087a94a9)
+![impellerdemo_avalonia](https://github.com/user-attachments/assets/f2ec0782-3c1c-4045-b73c-922692858d8b)
