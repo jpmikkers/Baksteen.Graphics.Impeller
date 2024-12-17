@@ -1,4 +1,4 @@
-﻿namespace ImpellerDemo;
+﻿namespace ImpellerDemoDotGLFW;
 
 using DotGLFW;
 using System;
