@@ -117,7 +117,6 @@ public class ImpellerDisplayListBuilder : IDisposable
         ImpellerNative.ImpellerDisplayListBuilderSave(Handle);
     }
 
-    // TODO
     //------------------------------------------------------------------------------
     /// @brief      Stashes the current transformation and clip state onto a save
     ///             stack and creates and creates an offscreen layer onto which
@@ -132,12 +131,17 @@ public class ImpellerDisplayListBuilder : IDisposable
     /// @param[in]  paint     The paint.
     /// @param[in]  backdrop  The backdrop.
     ///
-    //[DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
-    //public static extern void ImpellerDisplayListBuilderSaveLayer(
-    //ImpellerDisplayListBuilderSafeHandle builder,
-    //in ImpellerRect bounds,
-    //ImpellerPaintSafeHandle paint,
-    //ImpellerImageFilter IMPELLER_NULLABLE backdrop);
+    public void SaveLayer(
+        in ImpellerRect bounds,
+        ImpellerPaint paint,
+        ImpellerImageFilter? backdrop)
+    {
+        ImpellerNative.ImpellerDisplayListBuilderSaveLayer(
+                Handle,
+                bounds,
+                paint.Handle,
+                backdrop?.Handle ?? ImpellerImageFilterSafeHandle.NullSafeHandle);
+    }
 
     //------------------------------------------------------------------------------
     /// @brief      Pops the last entry pushed onto the save stack using a call to

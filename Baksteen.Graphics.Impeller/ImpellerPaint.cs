@@ -72,6 +72,11 @@ public class ImpellerPaint : IDisposable
         set => ImpellerPaintSetMaskFilter(_handle, value.Handle);
     }
 
+    public ImpellerImageFilter ImageFilter
+    {
+        set => ImpellerPaintSetImageFilter(_handle, value.Handle);
+    }
+
     public float StrokeWidth
     {
         get => _strokeWidth;
