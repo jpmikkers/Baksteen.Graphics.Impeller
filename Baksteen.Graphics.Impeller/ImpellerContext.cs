@@ -28,6 +28,16 @@ public class ImpellerContext : IDisposable
         ).AssertValid();
     }
 
+    public static Version GetVersion()
+    {
+        var rawVersion = ImpellerNative.ImpellerGetVersion();
+        var versionVariant = rawVersion >> 29;
+        var versionMajor = (rawVersion >> 22) & 0x7FU;
+        var versionMinor = (rawVersion >> 12) & 0x3FFU;
+        var versionPatch = rawVersion & 0xFFFU;
+        return new Version((int)versionMajor, (int)versionMinor, (int)versionVariant, (int)versionPatch);
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)

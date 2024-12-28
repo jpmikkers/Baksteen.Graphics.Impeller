@@ -120,7 +120,7 @@ internal class Program
 
         GC.Collect();
 
-        Console.WriteLine($"Running impeller version : {ImpellerCooked.GetVersion()}");
+        Console.WriteLine($"Running impeller version : {ImpellerContext.GetVersion()}");
 
         using var context = new ImpellerContext(procName => Glfw.GetProcAddress(procName));
         
