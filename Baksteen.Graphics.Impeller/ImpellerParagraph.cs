@@ -9,6 +9,14 @@ public class ImpellerParagraph : IDisposable
     private bool disposedValue;
 
     public ImpellerParagraphSafeHandle Handle => _handle;
+    public float MaxWidth => GetMaxWidth();
+    public float Height => GetHeight();
+    public float LongestLineWidth => GetLongestLineWidth();
+    public float MinIntrinsicWidth => GetMinIntrinsicWidth();
+    public float MaxIntrinsicWidth => GetMaxIntrinsicWidth();
+    public float IdeographicBaseline => GetIdeographicBaseline();
+    public float AlphabeticBaseline => GetAlphabeticBaseline();
+    public uint LineCount => GetLineCount();
 
     internal ImpellerParagraph(ImpellerParagraphSafeHandle handle)
     {
