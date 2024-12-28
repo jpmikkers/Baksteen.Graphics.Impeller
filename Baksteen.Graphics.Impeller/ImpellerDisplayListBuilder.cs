@@ -3,6 +3,7 @@
 using System;
 using static Baksteen.Graphics.Impeller.ImpellerNative;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 public class ImpellerDisplayListBuilder : IDisposable
 {
@@ -13,9 +14,13 @@ public class ImpellerDisplayListBuilder : IDisposable
 
     public ImpellerDisplayListBuilder()
     {
-        _handle = ImpellerNative.ImpellerDisplayListBuilderNew(
-            new ImpellerRect { x = 0, y = 0, width = 800, height = 600 }                // TODO FIX ME
-            ).AssertValid();  // todo cullrect
+        _handle = ImpellerNative.ImpellerDisplayListBuilderNew(ref Unsafe.NullRef<ImpellerRect>()).AssertValid();
+    }
+
+    public ImpellerDisplayListBuilder(float x,float y,float width,float height)
+    {
+        var rect = new ImpellerRect { x = x, y = y, width = width, height = height };
+        _handle = ImpellerNative.ImpellerDisplayListBuilderNew(ref rect).AssertValid();
     }
 
     public void DrawPaint(ImpellerPaint paint)

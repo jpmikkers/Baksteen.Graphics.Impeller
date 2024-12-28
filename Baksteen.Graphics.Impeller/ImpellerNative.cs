@@ -1593,7 +1593,7 @@ ImpellerPaintNew();
     ///
     [DllImport(ImpellerDLLName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ImpellerDisplayListBuilderSafeHandle
-    ImpellerDisplayListBuilderNew(in ImpellerRect cull_rect);
+    ImpellerDisplayListBuilderNew(ref ImpellerRect cull_rect);
 
     //------------------------------------------------------------------------------
     /// @brief      Retain a strong reference to the object. The object can be NULL
